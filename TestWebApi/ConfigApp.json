@@ -1,0 +1,18 @@
+{
+  "DBConnectionString": "Server=172.16.0.205;Port=3307;Database=nwfmtemp;Uid=sdba;Pwd=sdba;Pooling=true;minpoolsize=0;MaximumPoolSize=40;SslMode=none;",
+  "AppSettings": {
+    //Redisª∫¥Ê
+    "RedisCaching": {
+      "Enabled": true,
+      "ConnectionString": "127.0.0.1:6379"
+    },
+    // ˝æ›ø‚≈‰÷√
+    "SqlServer": {
+      "SQLType": "MySQL",
+      "SqlServerConnection": "Server=172.16.0.205;Port=3307;Database=nwfmtemp;Uid=sdba;Pwd=sdba;Pooling=true;minpoolsize=0;MaximumPoolSize=40;SslMode=none;",
+      "ProviderName": "System.Data.SqlClient"
+    },
+    "Date": "2020-06-29",
+    "Author": "Tom"
+  }
+}

@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TestWebApi</name>
+    </assembly>
+    <members>
+        <member name="M:TestWebApi.AuthHelper.AppSetting.app(System.String[])">
+            <summary>
+            封装要操作的字符
+            </summary>
+            <param name="sections"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.AuthHelper.JWT.JWTHelper.SerializeJwt(System.String)">
+            <summary>
+            解析
+            </summary>
+            <param name="jwtStr"></param>
+            <returns></returns>
+        </member>
+        <member name="T:TestWebApi.AuthHelper.JWT.JWTHelper.TokenModelJwt">
+            <summary>
+            令牌
+            </summary>
+        </member>
+        <member name="P:TestWebApi.AuthHelper.JWT.JWTHelper.TokenModelJwt.Uid">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:TestWebApi.AuthHelper.JWT.JWTHelper.TokenModelJwt.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:TestWebApi.AuthHelper.JWT.JWTHelper.TokenModelJwt.Work">
+            <summary>
+            职能
+            </summary>
+        </member>
+        <member name="T:TestWebApi.Controllers.ValueController">
+            <summary>
+            firlst 测试控制器
+            </summary>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.HH">
+            <summary>
+            测试1
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.GetJwtToken(TestWebApi.AuthHelper.JWT.JWTHelper.TokenModelJwt)">
+            <summary>
+            获取jwt Token
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.AddAD(Test.Core.Model.Models.Advertisement)">
+            <summary>
+            添加信息
+            </summary>
+            <param name="model">实体信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.AddADREntitys(Test.Core.Model.Models.Advertisement)">
+            <summary>
+            添加10000条数据
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.AddMany(Test.Core.Model.Models.Advertisement,System.Int64)">
+            <summary>
+            批量添加数据
+            </summary>
+            <param name="model"></param>
+            <param name="number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.GetADSQL(System.Int32)">
+            <summary>
+            SQL语句获取数据
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.GetEntityByID(System.Int32)">
+            <summary>
+            通过id来获取信息
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.GetADLINQ(System.Int32)">
+            <summary>
+            通过linq信息来获取信息
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.Update(Test.Core.Model.Models.Advertisement)">
+            <summary>
+            更新数据
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
