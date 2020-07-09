@@ -12,7 +12,14 @@ namespace TestWebApi.AuthHelper
        static IConfiguration _configuration { get; set; }
         static AppSetting()
         {
-            
+            if (_configuration == null)
+            {
+                _configuration = new ConfigurationBuilder()
+                //.SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", false, true)
+                // .Add(new JsonConfigurationSource { Path = "", Optional = false, ReloadOnChange = true })
+                .Build();
+            }
         }
 
         /// <summary>
@@ -21,14 +28,7 @@ namespace TestWebApi.AuthHelper
         /// <param name="sections"></param>
         /// <returns></returns>
         public static string app(params string[] sections)
-        {
-            if (_configuration == null) {
-                _configuration = new ConfigurationBuilder()
-                //.SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json",false,true)
-               // .Add(new JsonConfigurationSource { Path = "", Optional = false, ReloadOnChange = true })
-                .Build();
-            }
+        {          
             try
             {
                 var val = string.Empty;
