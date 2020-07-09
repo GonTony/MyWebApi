@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TPlugin</name>
+    </assembly>
+    <members>
+        <member name="T:TPlugin.TestController">
+            <summary>
+            插件 Test控制器
+            </summary>
+        </member>
+        <member name="M:TPlugin.TestController.policy">
+            <summary>
+            缓存测试
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Test.Core.IServer;
 using Test.Core.Model.Models;
@@ -20,6 +21,7 @@ namespace TestWebApi.Controllers
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
+    
     public class ValueController:ControllerBase
     {
         ICaching _cach = null;
@@ -59,7 +61,12 @@ namespace TestWebApi.Controllers
             return Ok(new { code = "200", jwt = jwtStr });
         }
 
+        /// <summary>
+        /// Test 测试
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [Authorize(Policy = "Admin")]//权限验证
         public async Task<string> Test()
         {
             

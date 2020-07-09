@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,8 +9,12 @@ using TPlugin.model;
 
 namespace TPlugin
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// 插件 Test控制器
+    /// </summary>
+    [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Roles = "TestRole")]
     public class TestController: ControllerBase
     {
         private readonly ITClass tt;
@@ -20,7 +25,11 @@ namespace TPlugin
             cache_ = caching;
         }
 
-        [HttpGet]
+        /// <summary>
+        /// 缓存测试
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]      
         public string policy() {
             string cacheString = cache_.Get("1")?.ToString();
             return tt.Name()+ cacheString;

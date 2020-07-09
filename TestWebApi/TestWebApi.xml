@@ -56,6 +56,12 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:TestWebApi.Controllers.ValueController.Test">
+            <summary>
+            Test 测试
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:TestWebApi.Controllers.ValueController.AddAD(Test.Core.Model.Models.Advertisement)">
             <summary>
             添加信息

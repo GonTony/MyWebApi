@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,9 +18,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using TestCore;
 using TestCore.Redis;
 using TestWebApi.AOP;
+using Microsoft.OpenApi.Models;
 
 namespace TestWebApi
 {
@@ -47,6 +51,7 @@ namespace TestWebApi
             string CurrBasePath = AppContext.BaseDirectory;
             string xmlInterfacePath = Path.Combine(CurrBasePath, "TestWebApi.xml");
             string xmlModelPath = Path.Combine(CurrBasePath,"Test.Core.Model.xml");
+            string xmlTPluginPath = Path.Combine(CurrBasePath, "TPlugin.xml");
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -57,11 +62,79 @@ namespace TestWebApi
                     //TermsOfService=Uri
                     Contact=new Microsoft.OpenApi.Models.OpenApiContact { Name="MyWebApi",Email="xxxx"}
                 });
+               
+
                 c.IncludeXmlComments(xmlInterfacePath, true);//true 为显示controller的注释
+                c.IncludeXmlComments(xmlTPluginPath, true);
                 c.IncludeXmlComments(xmlModelPath, true);
+
+                //权限 Token
+                // var security = new Dictionary<string, IEnumerable<string>> { { "TestWebApi", new string[] { } } };
+                //OpenApiSecurityRequirement keys = new OpenApiSecurityRequirement();
+                //OpenApiSecurityScheme scheme = new OpenApiSecurityScheme();
+                //scheme.Name = "TestWebApi";
+                //keys.Add(scheme, new List<string>());
+                //c.AddSecurityRequirement(keys);
+                //c.OperationFilter<SwaggerHeader>();
+                //c.OperationFilter<AddResponseHeardersFilter>();
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Description = @"JWT授权(数据将在请求头中进行传输) 直接在下框中输入Bearer {token}（注意两者之间是一个空格",
+                    Name = "Authorization",//jwt默认的参数名称
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    Scheme="bearer",
+                    BearerFormat="JWT"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme{
+                            Reference=new OpenApiReference{
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{ }
+                    }
+                });
             });
             #endregion
 
+            #region auth认证
+            //var configAppsetting= AuthHelper.AppSetting.app(new string[] { "Audience", "Secret" });
+            string secretkey = AuthHelper.AppSetting.app(new string[] { "Audience", "Secret" });
+            var base64Key = Encoding.UTF8.GetBytes(secretkey);
+            var signingKey = new SymmetricSecurityKey(base64Key);
+            services.AddAuthentication(c =>
+            {
+                c.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                c.DefaultChallengeScheme= JwtBearerDefaults.AuthenticationScheme;
+            })
+             .AddJwtBearer(o =>
+             {
+                 o.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = signingKey,
+                     ValidateIssuer = true,
+                     ValidIssuer = AuthHelper.AppSetting.app(new string[] { "Audience", "Issuer" }),//发行人
+                     ValidateAudience = true,
+                     ValidAudience = AuthHelper.AppSetting.app(new string[] { "Audience", "Audience" }),//订阅人
+                     ValidateLifetime = true,
+                     ClockSkew = TimeSpan.Zero,//这个是缓冲过期时间，也就是说，即使我们配置了过期时间，这里也要考虑进去，过期时间+缓冲，默认好像是7分钟，你可以直接设置为0
+                     RequireExpirationTime = true,
+                 };
+
+             });
+            #endregion
+
+            services.AddAuthorization(o => {
+                o.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
+                o.AddPolicy("AdminOrTest", policy => policy.RequireRole("Admin","Test"));
+                o.AddPolicy("AdminAndTest", policy => policy.RequireRole("Admin").RequireRole("Test"));
+            });
 
             services.AddScoped<ICaching, MeMoryCache>();
 
@@ -145,7 +218,7 @@ namespace TestWebApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Apihelp V1");
             });
-
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc(
                 routes => {
