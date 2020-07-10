@@ -4,6 +4,32 @@
         <name>Test.Core.Model</name>
     </assembly>
     <members>
+        <!-- 对于成员“P:Test.Core.Model.Dtos.ADView.ImgUrl”忽略有格式错误的 XML 注释 -->
+        <member name="P:Test.Core.Model.Dtos.ADView.Title">
+            <summary>
+            广告标题
+            </summary>
+        </member>
+        <member name="P:Test.Core.Model.Dtos.ADView.Url">
+            <summary>
+            广告链接
+            </summary>
+        </member>
+        <member name="P:Test.Core.Model.Dtos.ADView.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:Test.Core.Model.Dtos.ADView.Createdate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:Test.Core.Model.Dtos.ADView.IDAndDatetime">
+            <summary>
+            测试使用
+            </summary>
+        </member>
         <member name="T:Test.Core.Model.Models.Advertisement">
             <summary>
             测试广告model

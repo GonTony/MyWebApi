@@ -38,10 +38,22 @@
             职能
             </summary>
         </member>
+        <member name="M:TestWebApi.AutoMapper.AutoMapperConfig.#ctor">
+            <summary>
+            automapper 基本原理为 会自动找到继承Profile类 进行配置
+            </summary>
+        </member>
         <member name="T:TestWebApi.Controllers.ValueController">
             <summary>
             firlst 测试控制器
             </summary>
+        </member>
+        <member name="M:TestWebApi.Controllers.ValueController.GetEntityToView(System.Int64)">
+            <summary>
+            （查询素材信息）使用AutoMapper 映射model
+            </summary>
+            <param name="id">素材ID</param>
+            <returns></returns>
         </member>
         <member name="M:TestWebApi.Controllers.ValueController.HH">
             <summary>

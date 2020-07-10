@@ -23,6 +23,7 @@ using TestCore;
 using TestCore.Redis;
 using TestWebApi.AOP;
 using Microsoft.OpenApi.Models;
+using AutoMapper;
 
 namespace TestWebApi
 {
@@ -47,6 +48,10 @@ namespace TestWebApi
             // services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddMvc()
               .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            #region AutoMapper
+            services.AddAutoMapper(typeof(Startup));
+            #endregion
+
             #region Swagger
             string CurrBasePath = AppContext.BaseDirectory;
             string xmlInterfacePath = Path.Combine(CurrBasePath, "TestWebApi.xml");
@@ -145,7 +150,7 @@ namespace TestWebApi
             AppContextWebApi = new AppContextWA(services);
             //AppContextWebApi.DBConString = configModel.DBConnectionString;
             AppContextWebApi.PluginFactory = new DefaultPluginFactory();
-            string pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugin");
+            string pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugin\netstandard2.0");
             AppContextWebApi.PluginFactory.Load(pluginPath);//加载插件
             AppContextWebApi.PluginFactory.Init(AppContextWebApi);
 
@@ -161,6 +166,10 @@ namespace TestWebApi
                     apm.ApplicationParts.Add(new AssemblyPart(a));
                 });
             }
+            #endregion
+
+            #region 跨域
+            services.AddCors();
             #endregion
 
             var builder = new ContainerBuilder();
@@ -206,7 +215,7 @@ namespace TestWebApi
             {
                 app.UseHsts();
             }
-            app.UseCors(options =>
+            app.UseCors(options =>//cors跨域一定要放在usemvc及UseHttpsRedirection前
             {
                 options.AllowAnyHeader();
                 options.AllowAnyMethod();

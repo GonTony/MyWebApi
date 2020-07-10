@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Test.Core.IServer;
+using Test.Core.Model.Dtos;
 using Test.Core.Model.Models;
 using TestCore;
 using TestCore.Redis;
@@ -33,6 +34,17 @@ namespace TestWebApi.Controllers
             redisManager_ = redisManager;
             _server = iadservice;
         }
+
+        /// <summary>
+        /// （查询素材信息）使用AutoMapper 映射model
+        /// </summary>
+        /// <param name="id">素材ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ADView> GetEntityToView(long id) {
+            return await _server.GetAdModelToView(id);
+        }
+
         /// <summary>
         /// 测试1
         /// </summary>
