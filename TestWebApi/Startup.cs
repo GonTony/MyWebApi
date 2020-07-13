@@ -24,6 +24,7 @@ using TestCore.Redis;
 using TestWebApi.AOP;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
+using static TestWebApi.CustomVersionApi.CustomApiVersonHelper;
 
 namespace TestWebApi
 {
@@ -59,14 +60,25 @@ namespace TestWebApi
             string xmlTPluginPath = Path.Combine(CurrBasePath, "TPlugin.xml");
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
                 {
-                    Version="v0.1.0",
-                    Title="MyWebApi",
-                    Description="接口说明",
-                    //TermsOfService=Uri
-                    Contact=new Microsoft.OpenApi.Models.OpenApiContact { Name="MyWebApi",Email="xxxx"}
+                    c.SwaggerDoc(version.ToString(), new OpenApiInfo
+                    {
+                        Version = version.ToString(),
+                        Title= "MyWebApi",
+                        Description=$"{version.ToString()}接口说明",
+                        //TermsOfService=Uri.
+                        Contact=new OpenApiContact {Name="api" }
+                    });
                 });
+                //c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                //{
+                //    Version="v0.1.0",
+                //    Title="MyWebApi",
+                //    Description="接口说明",
+                //    //TermsOfService=Uri
+                //    Contact=new Microsoft.OpenApi.Models.OpenApiContact { Name="MyWebApi",Email="xxxx"}
+                //});
                
 
                 c.IncludeXmlComments(xmlInterfacePath, true);//true 为显示controller的注释
@@ -150,7 +162,7 @@ namespace TestWebApi
             AppContextWebApi = new AppContextWA(services);
             //AppContextWebApi.DBConString = configModel.DBConnectionString;
             AppContextWebApi.PluginFactory = new DefaultPluginFactory();
-            string pluginPath = Path.Combine(AppContext.BaseDirectory, "Plugin\netstandard2.0");
+            string pluginPath = Path.Combine(AppContext.BaseDirectory, @"Plugin\netstandard2.0");
             AppContextWebApi.PluginFactory.Load(pluginPath);//加载插件
             AppContextWebApi.PluginFactory.Init(AppContextWebApi);
 
@@ -225,7 +237,11 @@ namespace TestWebApi
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Apihelp V1");
+                typeof(ApiVersion).GetEnumNames().ToList().ForEach(version =>
+                {
+                    c.SwaggerEndpoint($"/swagger/{version.ToString()}/swagger.json", $"Version {version.ToString()}");
+                });
+                //c.SwaggerEndpoint("/swagger/v1/swagger.json", "Apihelp V1");
             });
             app.UseAuthentication();
             app.UseHttpsRedirection();

@@ -124,5 +124,15 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="F:TestWebApi.CustomVersionApi.CustomApiVersonHelper.ApiVersion.v1">
+            <summary>
+            v1版本
+            </summary>
+        </member>
+        <member name="F:TestWebApi.CustomVersionApi.CustomApiVersonHelper.ApiVersion.v2">
+            <summary>
+            v2版本 
+            </summary>
+        </member>
     </members>
 </doc>
